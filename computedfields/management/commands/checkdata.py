@@ -5,6 +5,7 @@ from json import dumps
 from datetime import timedelta
 
 from django.core.management.base import BaseCommand, CommandError
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction, DatabaseError
 
 from computedfields.helpers import modelname, slice_iterator
@@ -132,7 +133,7 @@ class Command(BaseCommand):
                         if len(tainted) >= TAINTED_MAXLENGTH:
                             self.eprint(self.style.NOTICE('  (listing shortened...)'))
                 if json_out:
-                    json_out.write(dumps({'model': modelname(model), 'desync': desync}))
+                    json_out.write(dumps({'model': modelname(model), 'desync': desync}, cls=DjangoJSONEncoder))
         return has_desync
 
 
